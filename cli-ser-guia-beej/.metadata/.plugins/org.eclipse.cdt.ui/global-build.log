@@ -1,30 +1,25 @@
-20:18:56 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+20:28:24 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
 make all 
-Building file: ../servidor.c
+Building file: ../cliente.c
 Invoking: GCC C Compiler
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"servidor.d" -MT"servidor.d" -o "servidor.o" "../servidor.c"
-../servidor.c: In function ‘main’:
-../servidor.c:86:5: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
-     &sin_size)) == -1) {
-     ^
-In file included from /usr/include/netinet/in.h:23:0,
-                 from ../servidor.c:7:
-/usr/include/i386-linux-gnu/sys/socket.h:243:12: note: expected ‘socklen_t * __restrict__’ but argument is of type ‘int *’
- extern int accept (int __fd, __SOCKADDR_ARG __addr,
-            ^
-Finished building: ../servidor.c
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"cliente.d" -MT"cliente.d" -o "cliente.o" "../cliente.c"
+../cliente.c: In function ‘main’:
+../cliente.c:46:9: warning: implicit declaration of function ‘inet_addr’ [-Wimplicit-function-declaration]
+         their_addr.sin_addr.s_addr = inet_addr("192.168.0.12");//toma la ip directo
+         ^
+../cliente.c:24:25: warning: unused variable ‘he’ [-Wunused-variable]
+         struct hostent *he;
+                         ^
+Finished building: ../cliente.c
  
-Building target: servidor-desde-cero
+Building target: cliente-desde-cero
 Invoking: GCC C Linker
-gcc  -o "servidor-desde-cero"  ./servidor.o   
-Finished building target: servidor-desde-cero
+gcc  -o "cliente-desde-cero"  ./cliente.o   
+Finished building target: cliente-desde-cero
  
-20:18:57 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
+20:28:26 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
 make all 
 make: No se hace nada para «all».
-20:18:57 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
-make all 
-make: No se hace nada para «all».
-20:18:58 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+20:28:51 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
 make all 
 make: No se hace nada para «all».

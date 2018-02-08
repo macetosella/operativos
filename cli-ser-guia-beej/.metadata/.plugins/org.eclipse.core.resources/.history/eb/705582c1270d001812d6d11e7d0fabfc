@@ -65,7 +65,6 @@
         	char mensajeParaEnviar[1000];
 			scanf("%s",mensajeParaEnviar);
 			if (strcmp(mensajeParaEnviar, "exit") == 0){
-				send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
 				break;
 			}
 			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
