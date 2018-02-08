@@ -81,7 +81,6 @@
         //--------
         sin_size = sizeof(struct sockaddr_in);
 		//4° Accept cliente: numero de socket del cliente que se acaba de conectar
-        while(1){
 		if ((cliente = accept(sockfd, (struct sockaddr *)&their_addr,
 				&sin_size)) == -1) {
 			perror("accept");
@@ -97,19 +96,16 @@
             char* buffer = malloc(5);
             int bytesRecibidos = recv(cliente,buffer,10,0);//10->4: como maximo 4 bytes
             if(bytesRecibidos <= 0){
-            	printf("se fue el cliente\n");
-            	break;
+            	//NO RECIBI NADA
             }else{
             	if(strcmp ("exit", buffer) != 0){
             		printf("Llegaron %d bytes con mesaje %s\n",bytesRecibidos,buffer);
             		free(buffer);
             	}else{
-            		printf("se fue el cliente\n");
-            		break;
+            		printf("se fue el cliente");
             	}
 
             }
        }
-      }
         return 0;
     }

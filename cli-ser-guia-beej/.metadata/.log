@@ -290,3 +290,17 @@ java.io.IOException: close error
 	at org.eclipse.debug.internal.core.InputStreamMonitor.write(InputStreamMonitor.java:129)
 	at org.eclipse.debug.internal.core.InputStreamMonitor$1.run(InputStreamMonitor.java:100)
 	at java.lang.Thread.run(Thread.java:745)
+
+!ENTRY org.eclipse.debug.core 4 125 2018-02-08 20:05:24.879
+!MESSAGE Error logged from Debug Core: 
+!STACK 0
+java.io.IOException: close error
+	at org.eclipse.cdt.utils.pty.PTYOutputStream.close(PTYOutputStream.java:74)
+	at org.eclipse.debug.internal.core.InputStreamMonitor.write(InputStreamMonitor.java:129)
+	at org.eclipse.debug.internal.core.InputStreamMonitor$1.run(InputStreamMonitor.java:100)
+	at java.lang.Thread.run(Thread.java:745)
+
+!ENTRY org.eclipse.cdt.dsf 4 10005 2018-02-08 20:19:44.498
+!MESSAGE Request for monitor: 'RequestMonitor (org.eclipse.cdt.dsf.concurrent.RequestMonitor@53a293): Status ERROR: org.eclipse.cdt.dsf.gdb code=10001 Given context: (gdb[12].proc[7535].threadGroup[i1],gdb[12].proc[7535].OSthread[1]).thread[1], is already running. null' resulted in an error.
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10001 2018-02-08 20:19:44.498
+!MESSAGE Given context: (gdb[12].proc[7535].threadGroup[i1],gdb[12].proc[7535].OSthread[1]).thread[1], is already running.

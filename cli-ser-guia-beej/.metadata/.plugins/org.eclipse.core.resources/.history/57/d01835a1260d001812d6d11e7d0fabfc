@@ -97,14 +97,14 @@
             char* buffer = malloc(5);
             int bytesRecibidos = recv(cliente,buffer,10,0);//10->4: como maximo 4 bytes
             if(bytesRecibidos <= 0){
-            	printf("se fue el cliente\n");
+            	printf("se fue el cliente");
             	break;
             }else{
             	if(strcmp ("exit", buffer) != 0){
             		printf("Llegaron %d bytes con mesaje %s\n",bytesRecibidos,buffer);
             		free(buffer);
             	}else{
-            		printf("se fue el cliente\n");
+            		printf("se fue el cliente");
             		break;
             	}
 

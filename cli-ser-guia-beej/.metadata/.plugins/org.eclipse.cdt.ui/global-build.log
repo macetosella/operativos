@@ -1,10 +1,10 @@
-19:52:27 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+20:18:56 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
 make all 
 Building file: ../servidor.c
 Invoking: GCC C Compiler
 gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"servidor.d" -MT"servidor.d" -o "servidor.o" "../servidor.c"
 ../servidor.c: In function ‘main’:
-../servidor.c:85:5: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
+../servidor.c:86:5: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
      &sin_size)) == -1) {
      ^
 In file included from /usr/include/netinet/in.h:23:0,
@@ -19,6 +19,12 @@ Invoking: GCC C Linker
 gcc  -o "servidor-desde-cero"  ./servidor.o   
 Finished building target: servidor-desde-cero
  
-19:52:29 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+20:18:57 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
+make all 
+make: No se hace nada para «all».
+20:18:57 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+make all 
+make: No se hace nada para «all».
+20:18:58 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
 make all 
 make: No se hace nada para «all».
