@@ -94,18 +94,12 @@
             //Recibimos el mensaje
             //(lo que se puede hacer tambien es recibir un numero primero del tamaño del paquete y luego el paquete)
             char* buffer = malloc(5);
-            int bytesRecibidos = recv(cliente,buffer,10,0);//10->4: como maximo 4 bytes
+            int bytesRecibidos = recv(cliente,buffer,10,0);//4: como maximo 4 bytes
             if(bytesRecibidos < 0){
             	printf("Error al recibir datos\n");
             }else{
-            	if(strcmp ("exit", buffer) != 0){
-            		printf("Llegaron %d bytes con mesaje %s\n",bytesRecibidos,buffer);
-            		free(buffer);
-            	}else{
-            		printf("se fue el cliente");
-            	    break;
-            	}
-
+            	printf("Llegaron %d bytes con mesaje %s\n",bytesRecibidos,buffer);
+            	free(buffer);
             }
        }
         return 0;

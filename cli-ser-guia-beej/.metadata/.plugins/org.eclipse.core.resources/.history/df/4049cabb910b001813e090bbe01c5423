@@ -20,19 +20,19 @@
     int main(int argc, char *argv[])
     {
         int sockfd, numbytes;
-        char* buf = malloc(MAXDATASIZE);
+        char buf[MAXDATASIZE];
         struct hostent *he;
         struct sockaddr_in their_addr; // información de la dirección de destino
 
-//        if (argc != 2) {
-//            fprintf(stderr,"usage: client hostname\n");
-//            exit(1);
-//        }
-//
-//        if ((he=gethostbyname(argv[1])) == NULL) {  // obtener información de máquina
-//            perror("gethostbyname");
-//            exit(1);
-//        }
+        if (argc != 2) {
+            fprintf(stderr,"usage: client hostname\n");
+            exit(1);
+        }
+
+        if ((he=gethostbyname(argv[1])) == NULL) {  // obtener información de máquina
+            perror("gethostbyname");
+            exit(1);
+        }
 
         //1° Creamos un socket
         if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -61,11 +61,11 @@
         }
         printf("Recibi: %s",buf);
 
-        while(1){
-        	//char * mensajeParaEnviar = "";
-        	char mensajeParaEnviar[1000];
-			scanf("%s",mensajeParaEnviar);
-			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
+        char * mensajeParaEnviar;
+        scanf("%s",mensajeParaEnviar);
+        send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
+
+        for(1:1){
 
         }
 

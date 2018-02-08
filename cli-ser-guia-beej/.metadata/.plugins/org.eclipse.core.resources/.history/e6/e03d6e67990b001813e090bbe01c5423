@@ -62,10 +62,9 @@
         printf("Recibi: %s",buf);
 
         while(1){
-        	//char * mensajeParaEnviar = "";
-        	char mensajeParaEnviar[1000];
+        	char * mensajeParaEnviar = "";
 			scanf("%s",mensajeParaEnviar);
-			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
+			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar + 1), 0);
 
         }
 

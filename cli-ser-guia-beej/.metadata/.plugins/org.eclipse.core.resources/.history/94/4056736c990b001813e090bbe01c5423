@@ -65,7 +65,7 @@
         	//char * mensajeParaEnviar = "";
         	char mensajeParaEnviar[1000];
 			scanf("%s",mensajeParaEnviar);
-			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar), 0);
+			send(sockfd, mensajeParaEnviar,strlen(mensajeParaEnviar + 1), 0);
 
         }
 

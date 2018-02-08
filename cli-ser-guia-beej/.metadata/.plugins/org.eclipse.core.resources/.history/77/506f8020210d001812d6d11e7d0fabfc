@@ -98,14 +98,12 @@
             if(bytesRecibidos < 0){
             	printf("Error al recibir datos\n");
             }else{
-            	if(strcmp ("exit", buffer) != 0){
+            	if(buffer != 'exit'){
             		printf("Llegaron %d bytes con mesaje %s\n",bytesRecibidos,buffer);
             		free(buffer);
-            	}else{
-            		printf("se fue el cliente");
-            	    break;
             	}
-
+            	printf("se fue el cliente");
+            	break;
             }
        }
         return 0;
