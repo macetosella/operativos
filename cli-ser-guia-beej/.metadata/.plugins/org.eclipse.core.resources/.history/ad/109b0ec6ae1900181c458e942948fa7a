@@ -87,6 +87,8 @@ int main(void) {
 	//--------
 	sin_size = sizeof(struct sockaddr_in);
 
+
+
 	//4° Accept idSocketCliente: numero de socket del cliente que se acaba de conectar
 	while (1) {
 		TipoDatosCliente *datosCliente;
@@ -113,25 +115,25 @@ void atenderCliente(void *datoC) {
 	datosCliente = malloc(sizeof(TipoDatosCliente));
 	//igualo los punteros
 	datosCliente = datoC;
-	int idSocket = datosCliente->idSocketCliente;
-	char * ipClienteConectado = datosCliente->ipCliente;
-	if (send(idSocket, "Hola cliente, todo bien?\n", 25, 0) == -1) {
+	int idSocketPosta = datosCliente->idSocketCliente;
+	char * ipClienteConectadoPosta = datosCliente->ipCliente;
+	if (send(idSocketPosta, "Hola cliente, todo bien?\n", 25, 0) == -1) {
 		printf("No se pudo enviar saludo al cliente");
 	}
 	while (1) {
 		//Recibimos el mensaje
 		char* buffer = malloc(5);
-		int bytesRecibidos = recv(idSocket, buffer, 10, 0);//10->4: como maximo 4 bytes
+		int bytesRecibidos = recv(idSocketPosta, buffer, 10, 0);//10->4: como maximo 4 bytes
 		if (bytesRecibidos <= 0) {
-			printf("se fue el cliente de IP %s\n",ipClienteConectado);
+			printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
 			break;
 		} else {
 			if (strcmp("exit", buffer) != 0) {
 				printf("Llegaron %d bytes con mesaje %s del cliente IP%s\n", bytesRecibidos,
-						buffer,ipClienteConectado);
+						buffer,ipClienteConectadoPosta);
 				free(buffer);
 			} else {
-				printf("se fue el cliente de IP %s\n",ipClienteConectado);
+				printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
 				break;
 			}
 

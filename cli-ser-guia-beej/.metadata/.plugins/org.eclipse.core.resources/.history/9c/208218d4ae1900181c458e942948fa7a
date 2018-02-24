@@ -123,15 +123,15 @@ void atenderCliente(void *datoC) {
 		char* buffer = malloc(5);
 		int bytesRecibidos = recv(idSocket, buffer, 10, 0);//10->4: como maximo 4 bytes
 		if (bytesRecibidos <= 0) {
-			printf("se fue el cliente de IP %s\n",ipClienteConectado);
+			printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
 			break;
 		} else {
 			if (strcmp("exit", buffer) != 0) {
 				printf("Llegaron %d bytes con mesaje %s del cliente IP%s\n", bytesRecibidos,
-						buffer,ipClienteConectado);
+						buffer,ipClienteConectadoPosta);
 				free(buffer);
 			} else {
-				printf("se fue el cliente de IP %s\n",ipClienteConectado);
+				printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
 				break;
 			}
 
