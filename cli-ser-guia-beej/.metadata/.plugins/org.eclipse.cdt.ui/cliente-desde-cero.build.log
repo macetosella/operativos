@@ -1,6 +1,6 @@
-19:10:47 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
+18:46:12 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
 make all 
 make: No se hace nada para «all».
 
-19:10:47 Build Finished (took 83ms)
+18:46:12 Build Finished (took 70ms)
 

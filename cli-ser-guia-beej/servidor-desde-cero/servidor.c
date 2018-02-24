@@ -25,35 +25,15 @@ void sigchld_handler(int s) {
 		;
 }
 
-//Funcion que envia un saludo al cliente y se queda esperando los mensajes del cliente
-void atenderCliente(int* idSocketCliente) {
-	int idSocketPosta = *idSocketCliente;
-	if (send(idSocketPosta, "Hola cliente, todo bien?\n", 25, 0) == -1) {
-		printf("No se pudo enviar saludo al cliente");
-	}
-	while (1) {
-		//Recibimos el mensaje
-		char* buffer = malloc(5);
-		int bytesRecibidos = recv(idSocketPosta, buffer, 10, 0);//10->4: como maximo 4 bytes
-		if (bytesRecibidos <= 0) {
-			printf("se fue el cliente\n");
-			break;
-		} else {
-			if (strcmp("exit", buffer) != 0) {
-				printf("Llegaron %d bytes con mesaje %s\n", bytesRecibidos,
-						buffer);
-				free(buffer);
-			} else {
-				printf("se fue el cliente\n");
-				break;
-			}
+void atenderCliente(void *datoC);
 
-		}
-	}
-}
+typedef struct DatosCliente {
+		   char*  ipCliente;
+		   int   idSocketCliente;
+	} TipoDatosCliente;
 
 int main(void) {
-	int sockfd, idSocketCliente; // Escuchar sobre: sock_fd, nuevas conexiones sobre: idSocketCliente
+	int sockfd; // Escuchar sobre: sock_fd, nuevas conexiones sobre: idSocketCliente
 	struct sockaddr_in my_addr;    // información sobre mi dirección
 	struct sockaddr_in their_addr; // información sobre la dirección del idSocketCliente
 	int sin_size;
@@ -106,21 +86,53 @@ int main(void) {
 	}
 	//--------
 	sin_size = sizeof(struct sockaddr_in);
+
+	TipoDatosCliente *datosCliente;
+	datosCliente = malloc(sizeof(TipoDatosCliente));
+
 	//4° Accept idSocketCliente: numero de socket del cliente que se acaba de conectar
 	while (1) {
-		if ((idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
+		if ((datosCliente->idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
 				== -1) {
 			perror("accept");
 		}
-
-		printf("Socket cliente %d de IP %s\n", idSocketCliente,
-				inet_ntoa(their_addr.sin_addr));
+		datosCliente->ipCliente = inet_ntoa(their_addr.sin_addr);
+		printf("Socket cliente %d de IP %s\n", datosCliente->idSocketCliente,
+				datosCliente->ipCliente);
 
 		//CREAMOS UN HILO PARA ATENDERLO
 		pthread_t punteroHilo;
-		pthread_create(&punteroHilo, NULL, (void*) atenderCliente,
-				&idSocketCliente);
+		pthread_create(&punteroHilo, NULL, (void*) atenderCliente, datosCliente);
+
 	}
 	return 0;
 }
 
+//Funcion que envia un saludo al cliente y se queda esperando los mensajes del cliente
+void atenderCliente(void *datoC) {
+	TipoDatosCliente *datosCliente = datoC;
+	int idSocketPosta = datosCliente->idSocketCliente;
+	char * ipClienteConectadoPosta = datosCliente->ipCliente;
+	if (send(idSocketPosta, "Hola cliente, todo bien?\n", 25, 0) == -1) {
+		printf("No se pudo enviar saludo al cliente");
+	}
+	while (1) {
+		//Recibimos el mensaje
+		char* buffer = malloc(5);
+		int bytesRecibidos = recv(idSocketPosta, buffer, 10, 0);//10->4: como maximo 4 bytes
+		if (bytesRecibidos <= 0) {
+			printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
+			break;
+		} else {
+			if (strcmp("exit", buffer) != 0) {
+				printf("Llegaron %d bytes con mesaje %s del cliente IP%s\n", bytesRecibidos,
+						buffer,ipClienteConectadoPosta);
+				free(buffer);
+			} else {
+				printf("se fue el cliente de IP %s\n",ipClienteConectadoPosta);
+				break;
+			}
+
+		}
+	}
+}
