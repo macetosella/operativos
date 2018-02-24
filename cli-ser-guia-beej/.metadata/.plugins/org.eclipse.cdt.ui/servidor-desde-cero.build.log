@@ -1,6 +1,6 @@
-19:10:49 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+17:32:25 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
 make all 
 make: No se hace nada para «all».
 
-19:10:49 Build Finished (took 79ms)
+17:32:25 Build Finished (took 84ms)
 
