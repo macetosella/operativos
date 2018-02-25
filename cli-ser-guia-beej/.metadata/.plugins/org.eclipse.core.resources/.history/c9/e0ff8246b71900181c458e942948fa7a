@@ -117,7 +117,7 @@ void atenderCliente(void *datoC) {
 	datosCliente = datoC;
 	int idSocket = datosCliente->idSocketCliente;
 	char * ipClienteConectado = datosCliente->ipCliente;
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(mutex);
 	if (send(idSocket, "Hola cliente, todo bien?\n", 25, 0) == -1) {
 		printf("No se pudo enviar saludo al cliente");
 	}
@@ -140,5 +140,4 @@ void atenderCliente(void *datoC) {
 
 		}
 	}
-	pthread_mutex_unlock(&mutex);
 }

@@ -32,8 +32,6 @@ typedef struct DatosCliente {
 		   int   idSocketCliente;
 	} TipoDatosCliente;
 
-pthread_mutex_t mutex;
-
 int main(void) {
 	int sockfd; // Escuchar sobre: sock_fd, nuevas conexiones sobre: idSocketCliente
 	struct sockaddr_in my_addr;    // información sobre mi dirección
@@ -41,6 +39,18 @@ int main(void) {
 	int sin_size;
 	struct sigaction sa;
 	int yes = 1;
+
+	int* punteroInt;
+	punteroInt =malloc(sizeof(int));
+	//imprime en entero q seria el numero de direccion en memoria
+	printf("imprime en entero q seria el numero de direccion en memoria %d\n",punteroInt);
+	//aca guardo en la direccion x, el valor 8
+	*punteroInt = 8;
+	//sigue dando lo mismo
+	printf("sigue dando lo mismo %d\n",punteroInt);
+	printf("%d",&punteroInt);
+	printf("el contenido dentro de esa direccion en memoria%d",*punteroInt);
+
 
 	//1° CREAMOS EL SOCKET
 	//sockfd: numero o descriptor que identifica al socket que creo
@@ -117,7 +127,6 @@ void atenderCliente(void *datoC) {
 	datosCliente = datoC;
 	int idSocket = datosCliente->idSocketCliente;
 	char * ipClienteConectado = datosCliente->ipCliente;
-	pthread_mutex_lock(&mutex);
 	if (send(idSocket, "Hola cliente, todo bien?\n", 25, 0) == -1) {
 		printf("No se pudo enviar saludo al cliente");
 	}
@@ -140,5 +149,4 @@ void atenderCliente(void *datoC) {
 
 		}
 	}
-	pthread_mutex_unlock(&mutex);
 }
