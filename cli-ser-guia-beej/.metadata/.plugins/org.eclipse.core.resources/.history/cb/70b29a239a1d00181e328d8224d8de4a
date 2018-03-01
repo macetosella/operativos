@@ -1,0 +1,47 @@
+/*
+ ============================================================================
+ Name        : prueba_red_line.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+void esTab ();
+
+void main() {
+  char * linea = malloc(sizeof(char *));
+  initialize_readline();
+  while(1) {
+    linea = readline(">");
+    //Si no es null
+    if(linea && *linea){
+    	//Se guarda lo ingresado en un historial
+    	add_history(linea);
+    }
+    //Si lo que recibo es exit
+    if (strcmp("exit", linea) == 0) {
+    	free(linea);
+    	break;
+    }
+
+    //Evento que detecta el TAB (codigo ASCII) y ejecuta la funcion (No dejara el espacio del TAB al imprimir)
+    rl_bind_key ('\t',  (void *)esTab );
+
+    //Si quisiera respetar el espacio que deja el TAB sin disparar ningun evento
+    //rl_bind_key ('\t',  rl_insert );
+
+    printf("%s\n", linea);
+    free(linea);
+  }
+};
+
+void esTab(){
+	printf("Presionaste un TAB gato\n");
+}

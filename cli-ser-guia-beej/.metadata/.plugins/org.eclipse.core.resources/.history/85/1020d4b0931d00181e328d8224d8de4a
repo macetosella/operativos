@@ -1,0 +1,36 @@
+/*
+ ============================================================================
+ Name        : prueba_red_line.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int esTab ();
+
+void main() {
+  char * linea = malloc(sizeof(char *));
+  while(1) {
+    linea = readline(">");
+    //Si no es null
+    if(linea && *linea){
+    	//Se guarda lo ingresado en un historial
+    	add_history(linea);
+    }
+    //Si lo que recibo es exit
+    if (strcmp("exit", linea) == 0) {
+    	free(linea);
+    	break;
+    }
+    rl_bind_key ('\t', rl_insert);
+    printf("%s\n", linea);
+    free(linea);
+  }
+}

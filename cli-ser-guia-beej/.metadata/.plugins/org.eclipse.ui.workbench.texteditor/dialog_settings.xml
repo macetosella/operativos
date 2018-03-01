@@ -5,7 +5,7 @@
 		<item value="79" key="DIALOG_Y_ORIGIN"/>
 		<item value="438" key="DIALOG_HEIGHT"/>
 		<item value="878" key="DIALOG_X_ORIGIN"/>
-		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="1|Ubuntu|11.113402|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
@@ -13,8 +13,10 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Cliente" key="selection"/>
+		<item value="getwd" key="selection"/>
 		<list key="findhistory">
+			<item value="getwd"/>
+			<item value="TipoDatosCliente *datosCliente;&#x0A;&#x09;datosCliente = malloc(sizeof(TipoDatosCliente));"/>
 			<item value="cliente"/>
 			<item value="buf"/>
 			<item value="new_fd"/>

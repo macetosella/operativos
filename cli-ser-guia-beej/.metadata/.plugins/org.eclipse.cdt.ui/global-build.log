@@ -1,6 +1,3 @@
-21:04:06 **** Incremental Build of configuration Debug for project cliente-desde-cero ****
-make all 
-make: No se hace nada para «all».
-21:04:08 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
+20:44:01 **** Incremental Build of configuration Debug for project prueba-consola ****
 make all 
 make: No se hace nada para «all».

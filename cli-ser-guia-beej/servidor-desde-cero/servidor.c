@@ -123,7 +123,7 @@ void atenderCliente(void *datoC) {
 	}
 	while (1) {
 		//Recibimos el mensaje
-		char* buffer = malloc(5);
+		char* buffer = malloc(sizeof(char*));
 		int bytesRecibidos = recv(idSocket, buffer, 10, 0);//10->4: como maximo 4 bytes
 		if (bytesRecibidos <= 0) {
 			printf("se fue el cliente de IP %s\n",ipClienteConectado);

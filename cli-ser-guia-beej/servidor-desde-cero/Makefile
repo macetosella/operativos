@@ -1,7 +1,7 @@
 #Declaramos variables
 CC := gcc
 
-OBJS := servidor.o 
+OBJS := servidor.o
 
 #Generamos el principal
 all: ejecutableServidor
@@ -9,7 +9,7 @@ all: ejecutableServidor
 ejecutableServidor: $(OBJS)
 	gcc -o ejecutableServidor $(OBJS) -pthread
 
-servidor.o: servidor.c 
+servidor.o: servidor.c
 	gcc -c servidor.c
 
 #Borramos todo
