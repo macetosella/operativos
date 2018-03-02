@@ -3,12 +3,11 @@
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/errno.h>
-
+#include <unistd.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-extern char *getwd ();
-extern char *xmalloc ();
 typedef int Function ();
 typedef char **CPPFunction ();
 
@@ -43,21 +42,14 @@ COMMAND commands[] = {
 /* Forward declarations. */
 char *stripwhite ();
 COMMAND *find_command ();
+int too_dangerous (char *caller);
+int valid_argument (char *caller, char *arg);
 
 /* The name of this program, as taken from argv[0]. */
 char *progname;
 
 /* When non-zero, this global means the user is done using this program. */
 int done;
-
-char * dupstr (int s)
-{
-  char *r;
-
-  r = xmalloc (strlen (s) + 1);
-  strcpy (r, s);
-  return (r);
-}
 
 /* Execute a command line. */
 int execute_line (char *line){
@@ -126,73 +118,7 @@ char * stripwhite (char *string){
   return s;
 }
 
-/* **************************************************************** */
-/*                                                                  */
-/*                  Interface to Readline Completion                */
-/*                                                                  */
-/* **************************************************************** */
 
-char *command_generator ();
-char **fileman_completion ();
-
-/* Tell the GNU Readline library how to complete.  We want to try to complete
-   on command names if this is the first word in the line, or on filenames
-   if not. */
-initialize_readline ()
-{
-  /* Allow conditional parsing of the ~/.inputrc file. */
-  rl_readline_name = "FileMan";
-
-  /* Tell the completer that we want a crack first. */
-  rl_attempted_completion_function = (CPPFunction *)fileman_completion;
-}
-
-/* Attempt to complete on the contents of TEXT.  START and END show the
-   region of TEXT that contains the word to complete.  We can use the
-   entire line in case we want to do some simple parsing.  Return the
-   array of matches, or NULL if there aren't any. */
-char ** fileman_completion (char *text,int start,int end){
-  char **matches;
-
-  matches = (char **)NULL;
-
-  /* If this word is at the start of the line, then it is a command
-     to complete.  Otherwise it is the name of a file in the current
-     directory. */
-  if (start == 0)
-    matches = completion_matches (text, command_generator);
-
-  return (matches);
-}
-
-/* Generator function for command completion.  STATE lets us know whether
-   to start from scratch; without any state (i.e. STATE == 0), then we
-   start at the top of the list. */
-char * command_generator (char *text, int state){
-  static int list_index, len;
-  char *name;
-
-  /* If this is a new word to complete, initialize now.  This includes
-     saving the length of TEXT for efficiency, and initializing the index
-     variable to 0. */
-  if (!state)
-    {
-      list_index = 0;
-      len = strlen (text);
-    }
-
-  /* Return the next name which partially matches from the command list. */
-  while (name = commands[list_index].name)
-    {
-      list_index++;
-
-      if (strncmp (name, text, len) == 0)
-        return (dupstr(name));
-    }
-
-  /* If no names matched, then return NULL. */
-  return ((char *)NULL);
-}
 
 /* **************************************************************** */
 /*                                                                  */
@@ -205,28 +131,56 @@ char * command_generator (char *text, int state){
 static char syscom[1024];
 
 /* List the file(s) named in arg. */
-com_list (char *arg){
-  if (!arg)
-    arg = "";
-
-  sprintf (syscom, "ls %s", arg);
-  return (system (syscom));
-}
-
-com_view (char *arg){
-  if (!valid_argument ("view", arg))
-    return 1;
+int com_view (char *arg){
+	if (! valid_argument("view", arg))
+    return (1);
 
   sprintf (syscom, "more %s", arg);
   return (system (syscom));
 }
 
-com_rename (char *arg){
-  too_dangerous ("rename");
-  return (1);
+int com_list (char *arg){
+  if (!arg){
+	  arg = "";
+  }
+  sprintf (syscom, "ls %s", arg);
+  return (system (syscom));
 }
 
-com_stat (char *arg){
+int com_rename (char *arg){
+
+	int i = 0;
+	char * oldname;
+	char * newname;
+
+	//uso la primera parte antes del espacio en blanco
+	while (arg[i] && whitespace (arg[i]))
+		i++;
+	oldname = arg + i;
+
+	while (arg[i] && !whitespace (arg[i]))
+		i++;
+
+	if (arg[i])
+	  arg[i++] = '\0';
+
+
+	/* //uso la segunda parte luego del espacio en blanco */
+	while (whitespace (arg[i]))
+		i++;
+
+	newname = arg + i;
+	int ret = rename(oldname, newname);
+
+    if(ret == 0) {
+        printf("File renamed successfully\n");
+     } else {
+        printf("Error: unable to rename the file\n");
+     }
+     return (1);
+}
+
+int com_stat (char *arg){
   struct stat finfo;
 
   if (!valid_argument ("stat", arg))
@@ -243,22 +197,21 @@ com_stat (char *arg){
   printf ("%s has %d link%s, and is %d byte%s in length.\n", arg,
           finfo.st_nlink,
           (finfo.st_nlink == 1) ? "" : "s",
-          finfo.st_size,
-          (finfo.st_size == 1) ? "" : "s");
+          (int)finfo.st_size, (finfo.st_size == 1) ? "" : "s");
   printf ("Inode Last Change at: %s", ctime (&finfo.st_ctime));
   printf ("      Last access at: %s", ctime (&finfo.st_atime));
   printf ("    Last modified at: %s", ctime (&finfo.st_mtime));
   return (0);
 }
 
-com_delete (char *arg){
+int com_delete (char *arg){
   too_dangerous ("delete");
   return (1);
 }
 
 /* Print out help for ARG, or for all of the commands if ARG is
    not present. */
-com_help (char *arg){
+int com_help (char *arg){
   register int i;
   int printed = 0;
 
@@ -295,9 +248,8 @@ com_help (char *arg){
 }
 
 /* Change to the directory ARG. */
-com_cd (char *arg){
-  if (chdir (arg) == -1)
-    {
+int com_cd (char *arg){
+	if (chdir (arg) == -1){
       perror (arg);
       return 1;
     }
@@ -307,10 +259,12 @@ com_cd (char *arg){
 }
 
 /* Print out the current working directory. */
-com_pwd (char *ignore){
-  char dir[1024], *s;
+int com_pwd (char *ignore){
+  char dir[1024];
+  char* s;
+  size_t size = 1024;
+  s = getcwd(dir,size);
 
-  s = getwd (dir);
   if (s == 0)
     {
       printf ("Error getting pwd: %s\n", dir);
@@ -318,20 +272,21 @@ com_pwd (char *ignore){
     }
 
   printf ("Current directory is %s\n", dir);
-  return 0;
+  return (0);
 }
 
 /* The user wishes to quit using this program.  Just set DONE non-zero. */
-com_quit (char *arg){
+int com_quit (char *arg){
   done = 1;
   return (0);
 }
 
 /* Function which tells you that you can't do this. */
-too_dangerous (char *caller){
+int too_dangerous (char *caller){
   fprintf (stderr,
            "%s: Too dangerous for me to distribute.  Write it yourself.\n",
            caller);
+  return (0);
 }
 
 /* Return non-zero if ARG is a valid argument for CALLER, else print
@@ -347,16 +302,13 @@ int valid_argument (char *caller, char *arg){
 }
 
 
-main (int argc, char **argv){
+int main (int argc, char **argv){
   char *line, *s;
 
   progname = argv[0];
 
-  initialize_readline ();	/* Bind our completer. */
-
   /* Loop reading and executing lines until the user quits. */
-  for ( ; done == 0; )
-    {
+  for ( ; done == 0; ){
       line = readline ("FileMan: ");
 
       if (!line)
@@ -373,7 +325,8 @@ main (int argc, char **argv){
           execute_line (s);
         }
 
-      free (line);
+      free(line);
     }
-  exit (0);
+
+  return(0);
 }

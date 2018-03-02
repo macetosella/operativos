@@ -1,3 +1,18 @@
-20:44:01 **** Incremental Build of configuration Debug for project prueba-consola ****
+22:02:21 **** Incremental Build of configuration Debug for project prueba-consola ****
 make all 
 make: No se hace nada para «all».
+22:02:24 **** Incremental Build of configuration Debug for project prueba-consola ****
+make all 
+make: No se hace nada para «all».
+22:11:19 **** Incremental Build of configuration Debug for project prueba-consola ****
+make all 
+Building file: ../src/prueba-consola.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/prueba-consola.d" -MT"src/prueba-consola.d" -o "src/prueba-consola.o" "../src/prueba-consola.c"
+Finished building: ../src/prueba-consola.c
+ 
+Building target: prueba-consola
+Invoking: GCC C Linker
+gcc  -o "prueba-consola"  ./src/prueba-consola.o   -lreadline
+Finished building target: prueba-consola
+ 
