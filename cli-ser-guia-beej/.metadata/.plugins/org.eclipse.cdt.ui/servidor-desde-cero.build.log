@@ -1,6 +1,7 @@
-21:49:51 **** Incremental Build of configuration Debug for project servidor-desde-cero ****
-make all 
-make: No se hace nada para «all».
+00:27:48 **** Clean-only build of configuration Debug for project servidor-desde-cero ****
+make clean 
+rm -rf  ./servidor.o  ./servidor.d  servidor-desde-cero
+ 
 
-21:49:51 Build Finished (took 75ms)
+00:27:48 Build Finished (took 114ms)
 
