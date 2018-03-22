@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+//Agregar typedef struct me permite evitar tener que escribir cada vez que quiera una instancia
+//de la estructura como struct Alumno y usar solo la definicion de ABAJO q en este caso por coinicidencia 
+//tambien esta Alumno pero pudo ser t_Alumno (mejor)
 typedef struct Alumno{
   int32_t id_mensaje; //5bytes
   int32_t legajo; //5bytes
