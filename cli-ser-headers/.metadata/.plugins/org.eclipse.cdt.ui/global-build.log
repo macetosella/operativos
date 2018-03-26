@@ -1,0 +1,78 @@
+22:11:13 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+make: No se hace nada para «all».
+22:11:17 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+make: No se hace nada para «all».
+22:13:36 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+make: No se hace nada para «all».
+22:15:45 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+Building file: ../src/servidor.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/servidor.d" -MT"src/servidor.d" -o "src/servidor.o" "../src/servidor.c"
+../src/servidor.c: In function ‘levantarServidor’:
+../src/servidor.c:123:63: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
+   if ((datosCliente->idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
+                                                               ^
+In file included from /usr/include/netinet/in.h:23:0,
+                 from ../src/servidor.h:11,
+                 from ../src/servidor.c:7:
+/usr/include/i386-linux-gnu/sys/socket.h:243:12: note: expected ‘socklen_t * __restrict__’ but argument is of type ‘int *’
+ extern int accept (int __fd, __SOCKADDR_ARG __addr,
+            ^
+Finished building: ../src/servidor.c
+ 
+Building target: moduloServidor
+Invoking: GCC C Linker
+gcc  -o "moduloServidor"  ./src/moduloServidor.o ./src/servidor.o   -lpthread
+Finished building target: moduloServidor
+ 
+22:20:51 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+make: No se hace nada para «all».
+22:21:56 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+Building file: ../src/servidor.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/servidor.d" -MT"src/servidor.d" -o "src/servidor.o" "../src/servidor.c"
+../src/servidor.c: In function ‘levantarServidor’:
+../src/servidor.c:120:63: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
+   if ((datosCliente->idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
+                                                               ^
+In file included from /usr/include/netinet/in.h:23:0,
+                 from ../src/servidor.h:11,
+                 from ../src/servidor.c:7:
+/usr/include/i386-linux-gnu/sys/socket.h:243:12: note: expected ‘socklen_t * __restrict__’ but argument is of type ‘int *’
+ extern int accept (int __fd, __SOCKADDR_ARG __addr,
+            ^
+Finished building: ../src/servidor.c
+ 
+Building target: moduloServidor
+Invoking: GCC C Linker
+gcc  -o "moduloServidor"  ./src/moduloServidor.o ./src/servidor.o   -lpthread
+Finished building target: moduloServidor
+ 
+22:23:53 **** Incremental Build of configuration Debug for project moduloServidor ****
+make all 
+Building file: ../src/servidor.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/servidor.d" -MT"src/servidor.d" -o "src/servidor.o" "../src/servidor.c"
+../src/servidor.c: In function ‘levantarServidor’:
+../src/servidor.c:121:63: warning: pointer targets in passing argument 3 of ‘accept’ differ in signedness [-Wpointer-sign]
+   if ((datosCliente->idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
+                                                               ^
+In file included from /usr/include/netinet/in.h:23:0,
+                 from ../src/servidor.h:11,
+                 from ../src/servidor.c:7:
+/usr/include/i386-linux-gnu/sys/socket.h:243:12: note: expected ‘socklen_t * __restrict__’ but argument is of type ‘int *’
+ extern int accept (int __fd, __SOCKADDR_ARG __addr,
+            ^
+Finished building: ../src/servidor.c
+ 
+Building target: moduloServidor
+Invoking: GCC C Linker
+gcc  -o "moduloServidor"  ./src/moduloServidor.o ./src/servidor.o   -lpthread
+Finished building target: moduloServidor
+ 
