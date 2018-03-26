@@ -28,7 +28,8 @@ void levantarServidor();
 
 #define BACKLOG 10     // Cuántas conexiones pendientes se mantienen en cola
 
-#define MYIP "192.168.0.12"
+//#define MYIP "192.168.0.12"
+#define MYIP "127.0.0.1"
 
 typedef struct DatosCliente {
 		   char*  ipCliente;
