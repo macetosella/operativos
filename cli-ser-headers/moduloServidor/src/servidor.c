@@ -24,6 +24,8 @@ void atenderCliente(void *datoC) {
 	}
 
 	while (1) {
+		//Vacia los datos de salida estandar
+		fflush(stdout);
 		//Recibimos el mensaje (Se establece un protocolo donde el primer bytes es el numero de caracteres y el resto es el mensaje)
 		void* buffer = malloc(sizeof(int32_t) + sizeof(char) * 20);
 		int bytesRecibidos = recv(idSocket, buffer, sizeof(int32_t) + sizeof(char) * 20, 0);//10->4: como maximo 4 bytes
@@ -36,24 +38,21 @@ void atenderCliente(void *datoC) {
 		//TODO: si los bytes q reservo son los mismo que copio (tamanioMensaje*sizeof(char)) no tengo
 		//que preocupar de tener algun dato basura??
 		memcpy(mensaje, (buffer + sizeof(int32_t)), tamanioMensaje*sizeof(char) );
-
-		//TODO:si aplico free(mensaje) y un memset para dejar vacio el puntero, obtengo un comportamiento anormal, es necesario el free??
-
 		if (bytesRecibidos <= 0) {
 			printf("se fue el cliente de IP %s\n",ipClienteConectado);
-			//free(mensaje);
+			free(mensaje);
 			free(buffer);
 			break;
 		} else {
 			if (strcmp("exit", mensaje) != 0) {
 				printf("Llego el mensaje %s de longitud %d del cliente IP %s\n",
 						mensaje,tamanioMensaje,ipClienteConectado);
-				//free(mensaje);
+				free(mensaje);
 				free(buffer);
 
 			} else {
 				printf("se fue el cliente de IP %s\n",ipClienteConectado);
-				//free(mensaje);
+				free(mensaje);
 				free(buffer);
 
 				break;
