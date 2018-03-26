@@ -52,7 +52,7 @@ void levantarCliente(){
 		void *bufferEnvio = malloc((sizeof(int32_t)) + (sizeof(char)*20));
 		memcpy(bufferEnvio, &(tamanioMensaje), sizeof(int32_t));
 		size_t count = tamanioMensaje;
-		memcpy(bufferEnvio + sizeof(int32_t), mensajeParaEnviar, (sizeof(char)*20));
+		memcpy(bufferEnvio + sizeof(int32_t), mensajeParaEnviar, (sizeof(char)*tamanioMensaje));
 
 		if (strcmp(mensajeParaEnviar, "exit") == 0){
 			if(send(sockfd, bufferEnvio,24, 0)== -1){

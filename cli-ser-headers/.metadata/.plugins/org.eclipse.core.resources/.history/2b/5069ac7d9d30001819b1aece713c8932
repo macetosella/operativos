@@ -22,7 +22,6 @@ void atenderCliente(void *datoC) {
 	if (send(idSocket, "Hola cliente, todo bien?\n", 25, 0) == -1) {
 		printf("No se pudo enviar saludo al cliente");
 	}
-
 	while (1) {
 		//Recibimos el mensaje (Se establece un protocolo donde el primer bytes es el numero de caracteres y el resto es el mensaje)
 		void* buffer = malloc(sizeof(int32_t) + sizeof(char) * 20);
