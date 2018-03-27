@@ -10,7 +10,7 @@
 void levantarCliente(){
 
     int sockfd, numbytes;
-    char* buf = malloc(MAXDATASIZE);
+    char* buf = malloc(sizeof(char) * 25);
     struct sockaddr_in their_addr; // información de la dirección de destino
 
     //1° Creamos un socket
@@ -32,37 +32,40 @@ void levantarCliente(){
         printf("No se pudo conectar\n");
         exit(1);
     }
-    //Recibe y lo guarda en buffer
-    if ((numbytes=recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+    
+    //Copia 25: 24 dato y ultimo es \0
+    if ((numbytes = recv(sockfd, buf, 25, 0)) == -1) {
         perror("recv");
         printf("No se pudo recibir dato\n");
         exit(1);
     }
-    printf("Recibi: %s",buf);
+    
+    
+    printf("Recibi: %s\n",buf);
     free(buf);
 
     while(1){
-    	char* mensajeParaEnviar = malloc(sizeof(char) * 20);
-    	strcpy(mensajeParaEnviar,"");
-
-		scanf("%s",mensajeParaEnviar);
-
+        //scanf insertara todo en mensajeParaEnviar solo hasta  19 bytes
+    	char* mensajeParaEnviar = malloc((sizeof(char) *20));
+    	scanf("%s",mensajeParaEnviar);
+        
 		//Serializamos (deberia pasar q el strlen de diferente de 20 si solo escrib 5 por ejem)
 		int tamanioMensaje = strlen(mensajeParaEnviar);
-		void *bufferEnvio = malloc((sizeof(int32_t)) + (sizeof(char)*20));
+        void *bufferEnvio = malloc((sizeof(int32_t)) + tamanioMensaje);
 		memcpy(bufferEnvio, &(tamanioMensaje), sizeof(int32_t));
-		size_t count = tamanioMensaje;
-		memcpy(bufferEnvio + sizeof(int32_t), mensajeParaEnviar, (sizeof(char)*tamanioMensaje));
+		//Copio solo los caracteres con valor del mensajeParaEnviar sin el \0
+		memcpy(bufferEnvio + sizeof(int32_t), mensajeParaEnviar, tamanioMensaje);
 
 		if (strcmp(mensajeParaEnviar, "exit") == 0){
-			if(send(sockfd, bufferEnvio,24, 0)== -1){
+			if(send(sockfd, bufferEnvio,sizeof(int32_t) + tamanioMensaje, 0)== -1){
 				puts("Error al enviar mensaje");
 			}
 			free(bufferEnvio);
 			free(mensajeParaEnviar);
 			break;
 		}
-		if(send(sockfd, bufferEnvio,24, 0)== -1){
+
+		if(send(sockfd, bufferEnvio,sizeof(int32_t) + tamanioMensaje, 0)== -1){
 			puts("Error al enviar mensaje");
 		}
 

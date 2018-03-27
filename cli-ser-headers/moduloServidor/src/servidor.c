@@ -12,55 +12,70 @@ void sigchld_handler(int s) {
 }
 
 //Funcion que envia un saludo al cliente y se queda esperando los mensajes del cliente
-void atenderCliente(void *datoC) {
-	TipoDatosCliente *datosCliente = malloc(sizeof(TipoDatosCliente));
-	//igualo los punteros
-	datosCliente = datoC;
-	int idSocket = datosCliente->idSocketCliente;
-	char * ipClienteConectado = datosCliente->ipCliente;
-	pthread_mutex_lock(&mutex);
-	if (send(idSocket, "Hola cliente, todo bien?\n", 25, 0) == -1) {
+void atenderCliente(TipoDatosCliente *datoC) {
+	
+	//por ahora sin semaforo
+	//pthread_mutex_lock(&mutex);
+
+	char * saludo = malloc(sizeof(char)*24 + 1);
+	strcpy(saludo,"Hola cliente, todo bien?");
+	saludo[strlen(saludo)]= '\0';
+	
+	//Quise enviar todo el mensaje con el \0 para q solo lo muestre del otro lado
+	if (send(datoC->idSocketCliente, saludo, 25, 0) == -1) {
 		printf("No se pudo enviar saludo al cliente");
 	}
-
+	
 	while (1) {
 		//Vacia los datos de salida estandar
 		fflush(stdout);
 		//Recibimos el mensaje (Se establece un protocolo donde el primer bytes es el numero de caracteres y el resto es el mensaje)
 		void* buffer = malloc(sizeof(int32_t) + sizeof(char) * 20);
-		int bytesRecibidos = recv(idSocket, buffer, sizeof(int32_t) + sizeof(char) * 20, 0);//10->4: como maximo 4 bytes
+		//recibo todo y lo meto en 24bytes porque desconosco cuanto llega posta
+		int bytesRecibidos = recv(datoC->idSocketCliente, buffer, sizeof(int32_t) + sizeof(char) * 20, 0);//10->4: como maximo 4 bytes
 
 		//Deserializo
 		int tamanioMensaje = 0;
 		memcpy(&tamanioMensaje,buffer,sizeof(int32_t));
 
-		char* mensaje = malloc(sizeof(char) * tamanioMensaje);
-		//TODO: si los bytes q reservo son los mismo que copio (tamanioMensaje*sizeof(char)) no tengo
-		//que preocupar de tener algun dato basura??
+		char* mensaje = malloc(sizeof(char) * (tamanioMensaje + 1));
+		
 		memcpy(mensaje, (buffer + sizeof(int32_t)), tamanioMensaje*sizeof(char) );
+		
+		//se agrega \0 para poder imprimir sin problema
+		mensaje[tamanioMensaje] = '\0';
+		
 		if (bytesRecibidos <= 0) {
-			printf("se fue el cliente de IP %s\n",ipClienteConectado);
-			free(mensaje);
+			printf("se fue el cliente de IP %s\n",datoC->ipCliente);
+			
 			free(buffer);
+			free(mensaje);
+			
 			break;
 		} else {
-			if (strcmp("exit", mensaje) != 0) {
+			if (strcmp(mensaje,"exit") != 0) {
 				printf("Llego el mensaje %s de longitud %d del cliente IP %s\n",
-						mensaje,tamanioMensaje,ipClienteConectado);
-				free(mensaje);
+						mensaje,tamanioMensaje,datoC->ipCliente);
+				
 				free(buffer);
+				free(mensaje);
 
 			} else {
-				printf("se fue el cliente de IP %s\n",ipClienteConectado);
-				free(mensaje);
+				printf("se fue el cliente de IP %s\n",datoC->ipCliente);
+				
 				free(buffer);
+				free(mensaje);
 
 				break;
 			}
 
 		}
 	}
-	pthread_mutex_unlock(&mutex);
+	free(datoC->ipCliente);
+	free(datoC);
+	free(saludo);
+	//por ahora sin semaforo
+	//pthread_mutex_unlock(&mutex);
 }
 
 void levantarServidor() {
@@ -120,19 +135,39 @@ void levantarServidor() {
 
 	//4° Accept idSocketCliente: numero de socket del cliente que se acaba de conectar
 	while (1) {
-		TipoDatosCliente *datosCliente;
-		datosCliente = malloc(sizeof(TipoDatosCliente));
+		
+		TipoDatosCliente * datosCliente = malloc(sizeof(TipoDatosCliente));
+		datosCliente->ipCliente = malloc(sizeof(char) * 30);
+
+		puts("Ingrese 'si' para recibir una nueva conexion o 'no' para terminar ");
+		//scanf solo inserta 2 y el 3ro lo deja para el \0
+		char * entrada = malloc(sizeof(char) * 2 + 1);
+		//espero de entrada solo SI  o NO 
+		scanf("%s",entrada);
+		if(strcmp(entrada,"no") == 0){
+
+			free(entrada);
+			free(datosCliente->ipCliente);
+			free(datosCliente);
+			break;
+		}
+		free(entrada);
+
 		if ((datosCliente->idSocketCliente = accept(sockfd, (struct sockaddr *) &their_addr, &sin_size))
 				== -1) {
 			perror("accept");
 		}
-		datosCliente->ipCliente = inet_ntoa(their_addr.sin_addr);
+		
+		strcpy(datosCliente->ipCliente,inet_ntoa(their_addr.sin_addr));
+		
 		printf("Socket cliente %d de IP %s\n", datosCliente->idSocketCliente,
 				datosCliente->ipCliente);
 
 		//CREAMOS UN HILO PARA ATENDERLO
 		pthread_t punteroHilo;
 		pthread_create(&punteroHilo, NULL, (void*) atenderCliente, datosCliente);
+		//espero a q termine el hilo
+		pthread_join(punteroHilo,NULL);
 
 	}
 }
